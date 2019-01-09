@@ -1,6 +1,6 @@
 import jrnl
 
-from conf import CONFIG_PATH, JRNL_CONFIG, JOURNAL_NAME
+from jrnl_server.conf import CONFIG_PATH, JRNL_CONFIG, JOURNAL_NAME
 
 
 def load_journal():

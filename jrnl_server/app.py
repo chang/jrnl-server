@@ -5,7 +5,7 @@ import json
 from flask import Flask
 import flask
 
-from wrappers import JournalWrapper, EntryWrapper, NoEntryError
+from jrnl_server.wrappers import JournalWrapper, EntryWrapper, NoEntryError
 
 
 app = Flask(__name__)

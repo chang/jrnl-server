@@ -1,4 +1,4 @@
-from conf import TAG_COLORS
+from jrnl_server.conf import TAG_COLORS
 
 
 class HTMLTag:

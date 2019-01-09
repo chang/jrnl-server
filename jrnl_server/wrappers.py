@@ -4,9 +4,9 @@ import logging
 import flask
 import jrnl
 
-from conf import JRNL_CONFIG
-from elements import HTMLTag
-from helpers import load_journal, get_day_with_suffix
+from jrnl_server.conf import JRNL_CONFIG
+from jrnl_server.elements import HTMLTag
+from jrnl_server.helpers import load_journal, get_day_with_suffix
 
 
 

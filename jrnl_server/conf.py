@@ -1,3 +1,4 @@
+import os
 import jrnl
 
 
@@ -8,12 +9,15 @@ def load_config():
     return config
 
 
-CONFIG_PATH = '$HOME/.jrnl_config'
+CONFIG_PATH = os.path.join(os.environ['HOME'], '.jrnl_config')
 
 JOURNAL_NAME = 'default'
 
 TAG_COLORS = {
     '@tag': 'info',
+    '@health': 'danger',
+    '@feel': 'info',
+    '@meditation': 'warning',
 }
 
 JRNL_CONFIG = load_config()
