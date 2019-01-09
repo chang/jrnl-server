@@ -15,9 +15,6 @@ JOURNAL_NAME = 'default'
 
 TAG_COLORS = {
     '@tag': 'info',
-    '@health': 'danger',
-    '@feel': 'info',
-    '@meditation': 'warning',
 }
 
 JRNL_CONFIG = load_config()
