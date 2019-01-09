@@ -1,37 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Eric's Journal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
-  <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='main.css') }}" />
-</head>
-<body>
-  {{ config['_hero_template']|safe }}
+{% extends '_base.html' %}
+{% block body %}
+<div class="container">
+  <div class="content">
+    <ul>
+      {% for entry, entry_link, parsed_entry in entry_links %}
+      <li>
+        {% if parsed_entry.is_starred %}
+        <i class="fas fa-star" style="color: gold"></i>
+        {% endif %}
+        <a href="{{ entry_link }}">{{  entry  }}</a>
 
-  <div class="container">
-    <div class="content">
-      <ul>
-        {% for entry, entry_link, parsed_entry in entry_links %}
-        <li>
-          {% if parsed_entry.is_starred %}
-            <i class="fas fa-star" style="color: gold"></i>
-          {% endif %}
-          <a href="{{ entry_link }}">{{  entry  }}</a>
-
-          {% for tag in parsed_entry.html_tags() %}
-            {{ tag|safe }}
-          {% endfor %}
-          <!-- {{ parsed_entry.html_word_count(rounded=True)|safe }} -->
-
-        </li>
+        {% for tag in parsed_entry.html_tags() %}
+        {{ tag|safe }}
         {% endfor %}
-      </ul>
-    </div>
+        <!-- {{ parsed_entry.html_word_count(rounded=True)|safe }} -->
+
+      </li>
+      {% endfor %}
+    </ul>
   </div>
-</body>
-</html>
+</div>
+{% endblock body %}

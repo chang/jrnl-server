@@ -10,12 +10,6 @@ from jrnl_server.wrappers import JournalWrapper, EntryWrapper, NoEntryError
 
 app = Flask(__name__)
 
-def load_template(template_name, **kwargs):
-    template = app.jinja_env.get_or_select_template(template_name)
-    return template.render(**kwargs)
-
-app.config['_hero_template'] = load_template('_hero.html')
-
 journal = JournalWrapper()
 
 
