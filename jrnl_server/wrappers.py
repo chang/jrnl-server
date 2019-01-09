@@ -4,7 +4,7 @@ import logging
 import flask
 import jrnl
 
-from jrnl_server.conf import JRNL_CONFIG
+from jrnl_server.config import conf
 from jrnl_server.elements import HTMLTag
 from jrnl_server.helpers import load_journal, get_day_with_suffix
 
@@ -34,7 +34,7 @@ class JournalWrapper:
             raise NoEntryError(msg)
 
     def _get_modified_time(self):
-        journal_path = JRNL_CONFIG['journal']
+        journal_path = conf.jrnl_config['journal']
         return os.stat(journal_path).st_mtime
 
     def reload_if_changed(self):

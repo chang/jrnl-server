@@ -1,10 +1,10 @@
 import jrnl
 
-from jrnl_server.conf import CONFIG_PATH, JRNL_CONFIG, JOURNAL_NAME
+from jrnl_server.config import conf
 
 
 def load_journal():
-    journal = jrnl.Journal.Journal(journal_name=JOURNAL_NAME, **JRNL_CONFIG)
+    journal = jrnl.Journal.Journal(journal_name=conf.JOURNAL_NAME, **conf.jrnl_config)
     journal.open()
     return journal
 

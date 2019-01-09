@@ -1,4 +1,4 @@
-from jrnl_server.conf import TAG_COLORS
+from jrnl_server.config import conf
 
 
 class HTMLTag:
@@ -6,11 +6,21 @@ class HTMLTag:
         self.tag = tag
 
     def _render(self, template, **kwargs):
-        if self.tag in TAG_COLORS:
-            color = TAG_COLORS[self.tag]
-        else:
-            color = 'light'
+        color = conf.TAG_COLORS[self.tag] if self.tag in conf.TAG_COLORS else self._get_color()
         return template.format(color=color, tag=self.tag, **kwargs)
+
+    def _get_color(self):
+        BULMA_COLORS = (
+            'primary',
+            'info',
+            'link',
+            'success',
+            'warning',
+            'danger',
+            'grey-dark',
+        )
+        i = hash(self.tag) % len(BULMA_COLORS)
+        return BULMA_COLORS[i]
 
     def pill(self):
         return self._render('<span class="tag is-rounded is-{color}">{tag}</span>')
