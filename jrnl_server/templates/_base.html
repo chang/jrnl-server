@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Eric's Journal</title>
+  <title>{{ config['NAME'] }}'s Journal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
@@ -33,10 +33,10 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title has-text-grey-dark">
-          <a href="/">Eric's Journal</a>
+          <a href="/">{{ config['NAME'] }}'s Journal</a>
         </h1>
         <h2 class="subtitle has-text-grey">
-          Written in jrnl.sh
+          {{ config['SUBTITLE'] }}
         </h2>
       </div>
     </div>
