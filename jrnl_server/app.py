@@ -6,7 +6,7 @@ import flask
 import flask_login
 
 from jrnl_server.config import conf
-from jrnl_server.login import DummyUser
+from jrnl_server.login import DummyUser, FailedLoginLogger
 from jrnl_server.helpers import reload_on_change, populate_config
 from jrnl_server.wrappers import JournalWrapper, EntryWrapper, NoEntryError
 
@@ -36,12 +36,20 @@ def login():
         return flask.render_template('login.html', bad_login=False)
 
     if flask.request.method == 'POST':
-        if flask.request.form['password'] == conf.PASSWORD:
+
+        password = flask.request.form['password']
+        if password == conf.PASSWORD:
             user = DummyUser()
             flask_login.login_user(user)
             return flask.redirect('/')
         else:
-            return flask.render_template('login.html', bad_login=True)
+            logger = FailedLoginLogger()
+            logger.log_attempt(password)
+            context = {
+                'bad_login': True,
+                'failed_message': logger.get_failed_message(),
+            }
+            return flask.render_template('login.html', **context)
 
 
 @app.route('/logout')
