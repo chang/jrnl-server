@@ -1,4 +1,10 @@
+import os
 from jrnl_server.config import conf
+
+
+def _consistent_hash(string):
+    # hash() offsets the hash values with each session for security
+    return sum([ord(s) for s in string])
 
 
 class HTMLTag:
@@ -17,9 +23,8 @@ class HTMLTag:
             'success',
             'warning',
             'danger',
-            'grey-dark',
         )
-        i = hash(self.tag) % len(BULMA_COLORS)
+        i = _consistent_hash(self.tag) % len(BULMA_COLORS)
         return BULMA_COLORS[i]
 
     def pill(self):

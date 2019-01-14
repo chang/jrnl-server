@@ -4,19 +4,19 @@
   <div class="content entry">
 
     <div class="tags is-pulled-right">
-      {% for tag in tags %}
+      {% for tag in parsed_entry.html_tags() %}
         {{ tag|safe }}
       {% endfor %}
     </div>
 
 
     <h1 class="title has-text-grey-dark is-4 date-title">
-      {{ title }}
+      {{ parsed_entry.title }}
     </h1>
     <h1 class="subtitle has-text-grey is-5 has-text-weight-light" id="entry-subtitle">
-      {{ date|safe }}
+      {{ parsed_entry.date|safe }}
     </h1>
-    {% for paragraph in body_paragraphs %}
+    {% for paragraph in parsed_entry.body_paragraphs %}
       <p>{{ paragraph|safe }}</p>
     {% endfor %}
 
@@ -24,7 +24,7 @@
     <div class="tags">
       <div class="tags has-addons">
         <a class="tag is-light">Words</a>
-        <a class="tag is-dark">{{ num_words }}</a>
+        <a class="tag is-dark">{{ parsed_entry.word_count }}</a>
       </div>
     </div>
 

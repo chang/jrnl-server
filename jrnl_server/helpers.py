@@ -1,12 +1,4 @@
-import jrnl
-
-from jrnl_server.config import conf
-
-
-def load_journal():
-    journal = jrnl.Journal.Journal(journal_name=conf.JOURNAL_NAME, **conf.jrnl_config)
-    journal.open()
-    return journal
+from timeit import default_timer
 
 
 def get_day_with_suffix(day):
@@ -32,3 +24,14 @@ def get_day_with_suffix(day):
             suffix = SUFFIXES[suffix_day]
             return (str(day), suffix)
         suffix_day -= 1
+
+
+def time_function(func):
+    def decorated(*args, **kwargs):
+        t0 = default_timer()
+        result = func(*args, **kwargs)
+        t1 = default_timer()
+        elapsed = t1 - t0
+        print('Function "{}": {}s'.format(func.__name__, elapsed))
+        return result
+    return decorated

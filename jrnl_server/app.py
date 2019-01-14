@@ -34,11 +34,7 @@ def entry(date):
     try:
         parsed_entry = EntryWrapper(journal.get_entry(date))
         context = {
-            'date': parsed_entry.date,
-            'title': parsed_entry.title,
-            'body_paragraphs': parsed_entry.body_paragraphs,
-            'tags': parsed_entry.html_tags(),
-            'num_words': parsed_entry.word_count,
+            'parsed_entry': parsed_entry,
         }
     except NoEntryError:
         context = {

@@ -1,4 +1,5 @@
 import os
+import re
 import logging
 
 import flask
@@ -6,8 +7,12 @@ import jrnl
 
 from jrnl_server.config import conf
 from jrnl_server.elements import HTMLTag
-from jrnl_server.helpers import load_journal, get_day_with_suffix
+from jrnl_server.helpers import get_day_with_suffix
 
+
+LINK_REGEX = re.compile(r'https?:\/\/[www]?.+')
+
+ITALIC_REGEX = re.compile(r'\*[a-zA-Z ]+\*')
 
 
 class NoEntryError(Exception):
@@ -17,12 +22,15 @@ class NoEntryError(Exception):
 class JournalWrapper:
 
     def __init__(self):
-        self._load_journal()
-
-    def _load_journal(self):
-        self.journal = load_journal()
+        self.journal = self.load_journal()
         self.journal_dict = self.make_journal_dict(self.journal)
         self._modified_time = self._get_modified_time()
+
+    @staticmethod
+    def load_journal():
+        journal = jrnl.Journal.Journal(journal_name=conf.JOURNAL_NAME, **conf.jrnl_config)
+        journal.open()
+        return journal
 
     def get_entry(self, date):
         # TODO: Do some input validation here.
@@ -120,10 +128,11 @@ class EntryWrapper:
     def word_count(self):
         return len([w for w in self.entry.body.split(" ") if w])
 
-    def _render_lists(self, paragraphs):
+    def _render_lists(self, body):
         def is_list_item(p):
             return p.strip().startswith('- ')
 
+        paragraphs = body.split('\n')
         rendered, unordered_list = [], []
         for i, p in enumerate(paragraphs):
             if is_list_item(p):
@@ -135,11 +144,23 @@ class EntryWrapper:
                     unordered_list = []
             else:
                 rendered.append(p)
-        return rendered
 
-    @staticmethod
+        return '\n'.join(rendered)
+
     def _render_italics(self, paragraph):
-        pass
+        for match in ITALIC_REGEX.findall(paragraph):
+            assert match[0] == '*' and match[-1] == '*'
+            match_without_asterisks = match[1:-1]
+            html_italic = '<span class="is-italic">{}</span>'.format(match_without_asterisks)
+            paragraph = paragraph.replace(match, html_italic)
+        return paragraph
+
+    def _render_links(self, paragraph):
+        matches = LINK_REGEX.findall(paragraph)
+        for match in matches:
+            html_link = '<a href="{0}">{0}</a>'.format(match)
+            paragraph = paragraph.replace(match, html_link)
+        return paragraph
 
     def _render_tags(self, paragraph):
         # Render tags in the body of the journal entry.
@@ -149,10 +170,10 @@ class EntryWrapper:
 
     @property
     def body_paragraphs(self):
-        def apply(func, paragraphs):
-            return [func(p) for p in paragraphs]
-
-        paragraphs = self.entry.body.split('\n')
-        paragraphs = self._render_lists(paragraphs)
-        paragraphs = apply(self._render_tags, paragraphs)
+        body = self.entry.body
+        body = self._render_lists(body)
+        body = self._render_tags(body)
+        body = self._render_links(body)
+        body = self._render_italics(body)
+        paragraphs = body.split('\n')
         return paragraphs
