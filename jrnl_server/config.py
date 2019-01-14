@@ -21,6 +21,10 @@ class Config:
         '@tag': 'info',
     }
 
+    # Login
+    PASSWORD = os.environ.get('PASSWORD') or ''
+    SECRET = os.environ.get('SECRET') or 'secret'
+
     @property
     def jrnl_config(self):
         config = jrnl.util.load_and_fix_json(self.CONFIG_PATH)

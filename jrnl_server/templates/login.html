@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+
+{% block hero %}
+{% endblock hero %}
+
+{% block body %}
+<div class="container" style="margin-top: 15em;">
+  <div class="columns is-centered is-mobile">
+    <div class="column is-half-mobile is-one-third-tablet is-one-third-desktop">
+
+      <h1 class="title is-2 is-size-4-mobile">{{ config['NAME'] }}'s Journal</h1>
+      <h2 class="subtitle is-5 has-text-weight-light">If you're not {{ config['NAME'] }}, go away.</h2>
+
+      <form method="POST">
+        <div class="field">
+          <p class="control has-icons-left">
+            <input class="input" type="password" placeholder="Password" name="password">
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+          </p>
+        </div>
+        <div class="field">
+          <p class="control">
+            <button class="button is-success">
+              Login
+            </button>
+          </p>
+        </div>
+      </form>
+
+      {% if bad_login %}
+      <div class="notification is-danger" style="margin-top: 2em;">
+        Incorrect login.
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock body %}

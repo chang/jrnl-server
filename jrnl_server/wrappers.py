@@ -22,15 +22,14 @@ class NoEntryError(Exception):
 class JournalWrapper:
 
     def __init__(self):
-        self.journal = self.load_journal()
-        self.journal_dict = self.make_journal_dict(self.journal)
-        self._modified_time = self._get_modified_time()
+        self._load_journal()
 
-    @staticmethod
-    def load_journal():
+    def _load_journal(self):
         journal = jrnl.Journal.Journal(journal_name=conf.JOURNAL_NAME, **conf.jrnl_config)
         journal.open()
-        return journal
+        self.journal = journal
+        self.journal_dict = self.make_journal_dict(self.journal)
+        self._modified_time = self._get_modified_time()
 
     def get_entry(self, date):
         # TODO: Do some input validation here.
