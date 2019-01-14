@@ -52,8 +52,8 @@ def logout():
 
 
 @app.route('/')
+@reload_on_change(journal)
 @flask_login.login_required
-# @reload_on_change(journal)
 def index():
     context = {
         'entry_links': journal.get_entry_links()
@@ -62,7 +62,7 @@ def index():
 
 
 @app.route('/entry/<path:date>')
-# @reload_on_change(journal)
+@reload_on_change(journal)
 @flask_login.login_required
 def entry(date):
     try:
