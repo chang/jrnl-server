@@ -68,7 +68,7 @@ class JournalWrapper:
     def get_entry_links(self):
         entry_links = []
         for date_str, entry in self.journal_dict.items():
-            entry_name = f'{date_str}: {entry.title}'
+            entry_name = f'<strong>{date_str}</strong>: {entry.title}'
             entry_link = f'entry/{date_str}'
             parsed_entry = EntryWrapper(entry)
             el = (entry_name, entry_link, parsed_entry)
@@ -105,16 +105,8 @@ class EntryWrapper:
     def html_tags(self):
         return [HTMLTag(t).pill() for t in self.tags]
 
-    def html_word_count(self, rounded=False):
-        rounded = 'is_rounded' if rounded else ''
-        return f"""
-        <div class="tags">
-            <div class="tags has-addons">
-                <a class="tag is-light {rounded}">Words</a>
-                <a class="tag is-dark {rounded}">{self.word_count}</a>
-            </div>
-        </div>
-        """
+    def html_word_count(self):
+        return f'<span class="tag is-dark is-rounded">{self.word_count}</span>'
 
     @property
     def date(self):
