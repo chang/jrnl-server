@@ -7,7 +7,7 @@ import jrnl
 
 from jrnl_server.config import conf
 from jrnl_server.elements import HTMLTag
-from jrnl_server.helpers import get_day_with_suffix
+from jrnl_server.helpers import get_day_with_suffix, get_link_title, time_function
 
 
 LINK_REGEX = re.compile(r'https?:\/\/[www]?.+')
@@ -119,6 +119,17 @@ class EntryWrapper:
     def word_count(self):
         return len([w for w in self.entry.body.split(" ") if w])
 
+    @property
+    def body_paragraphs(self):
+        body = self.entry.body
+        body = self._render_lists(body)
+        body = self._render_tags(body)
+        body = self._render_links(body)
+        body = self._render_italics(body)
+        paragraphs = body.split('\n')
+        return paragraphs
+
+    @time_function
     def _render_lists(self, body):
         def is_list_item(p):
             return p.strip().startswith('- ')
@@ -138,6 +149,7 @@ class EntryWrapper:
 
         return '\n'.join(rendered)
 
+    @time_function
     def _render_italics(self, paragraph):
         for match in ITALIC_REGEX.findall(paragraph):
             assert match[0] == '*' and match[-1] == '*'
@@ -146,25 +158,18 @@ class EntryWrapper:
             paragraph = paragraph.replace(match, html_italic)
         return paragraph
 
+    @time_function
     def _render_links(self, paragraph):
         matches = LINK_REGEX.findall(paragraph)
         for match in matches:
-            html_link = '<a href="{0}">{0}</a>'.format(match)
+            title = get_link_title(match)
+            html_link = '<a href="{}">{}</a>'.format(match, title)
             paragraph = paragraph.replace(match, html_link)
         return paragraph
 
+    @time_function
     def _render_tags(self, paragraph):
         # Render tags in the body of the journal entry.
         for tag in self.tags:
             paragraph = paragraph.replace(tag, HTMLTag(tag).text())
         return paragraph
-
-    @property
-    def body_paragraphs(self):
-        body = self.entry.body
-        body = self._render_lists(body)
-        body = self._render_tags(body)
-        body = self._render_links(body)
-        body = self._render_italics(body)
-        paragraphs = body.split('\n')
-        return paragraphs
