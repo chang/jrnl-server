@@ -1,3 +1,6 @@
 Flask==1.0.2
 jrnl==1.9.8
 Flask-Login==0.4.1
+requests
+pyyaml
+lxml

@@ -2,26 +2,26 @@
 {% block body %}
 <div class="container is-mobile">
   <div class="content">
-      <ul style="list-style-type: none;">
-          {% for entry, entry_link, parsed_entry in entry_links %}
-          <li style="margin-bottom: 0.5em;">
-            {% if parsed_entry.is_starred %}
-            <i class="fas fa-star" style="color: gold"></i>
-            {% endif %}
-            <a href="{{ entry_link }}">{{  entry|safe  }}</a>
+    <ul style="list-style-type: none;">
+      {% for entry, entry_link, parsed_entry in entry_links %}
+      <li style="margin-bottom: 0.5em;">
+        <a href="{{ entry_link }}">{{  entry|safe  }}</a>
+        {% if parsed_entry.is_starred %}
+        <i class="fas fa-star" style="color: gold"></i>
+        {% endif %}
 
-            <div class="tags is-pulled-right">
-              {% for tag in parsed_entry.html_tags() %}
-              {{ tag|safe }}
-              {% endfor %}
-
-              {{ parsed_entry.html_word_count()|safe }}
-            </div>
-
-          </li>
-          <hr class="entry-divider" style="margin: 0.25em; margin-left: 0; margin-right: 0; height: 1px;">
+        <div class="tags is-pulled-right">
+          {% for tag in parsed_entry.html_tags() %}
+          {{ tag|safe }}
           {% endfor %}
-        </ul>
+
+          {{ parsed_entry.html_word_count()|safe }}
+        </div>
+
+      </li>
+      <hr class="entry-divider" style="margin: 0.25em; margin-left: 0; margin-right: 0; height: 1px;">
+      {% endfor %}
+    </ul>
 
   </div>
 
